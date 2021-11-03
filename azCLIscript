@@ -1,0 +1,29 @@
+#DEV_ACR_NAME
+#GIT_USER
+#GIT_PAT
+
+az acr task create \
+    --registry $DEV_ACR_NAME \
+    --name buildpixelweb \
+    --image pixelweb:{{Run.ID}} \
+    --context git@github.com:break-free/ContainerPlay.git \
+    --branch master \
+    --file ACRTASKS/dockerfile \
+    --platform windows
+
+    az acr task tun --registry $DEV_ACR_NAME --name buildpixelweb
+    az acr task logs --registry $DEV_ACR_NAME
+    az acr task list-runs --registry $DEV_ACR_NAME --output table
+
+az acr task create --image hello-world:{{.Run.ID}} --name hello-world --registry bfvwbcr102121 --file Dockerfile --auth-mode None --context https://github.com/Forest-Dewberry/acr-build-helloworld-node.git --pull-request-trigger-enabled true --git-access-token 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
+Create a Linux task from a public GitHub repository which builds the hello-world image with both a git commit and pull request trigger enabled. Note that this task does not use Source Registry (MyRegistry), so we can explicitly set Auth mode as None for it.
+
+az acr task create --image hello-world:{{.Run.ID}} --name hello-world --registry MyRegistry --pull-request-trigger-enabled true --schedule "dailyTimer:0 12 * * Mon-Fri" --context https://github.com/Azure-Samples/acr-tasks.git#:multipleRegistries --file testtask.yaml --assign-identity [system]
+Create a Linux multi-step task from a public GitHub repository with with both system-assigned and user-assigned managed identities and base image, git commit, pull request, and timer triggers that run the task at noon on Mondays through Fridays with the timer trigger name provided.
+
+az acr task create --image hello-world:{{.Run.ID}} --name hello-world --registry MyRegistry --pull-request-trigger-enabled true --schedule "dailyTimer:0 12 * * Mon-Fri" --context https://github.com/Azure-Samples/acr-tasks.git#:multipleRegistries --file testtask.yaml --assign-identity [system]
+Create a Linux multi-step task from a public GitHub repository with with both system-assigned and user-assigned managed identities and base image, git commit, pull request, and timer triggers that run the task at noon on Mondays through Fridays with the timer trigger name provided.
+
+https://docs.microsoft.com/en-US/cli/azure/acr/task#az_acr_task_create
+Read more about the command in reference docs
+
