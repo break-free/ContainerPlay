@@ -41,18 +41,18 @@ az container create \
 
 az container create \
     --resource-group $RES_GROUP \
-    --name pr2-acr-tasks \
-    --image $ACR_NAME.azurecr.io/pixelweb:v1 \
+    --name vwb-acr-tasks \
+    --image $ACR_NAME.azurecr.io/bfvwb-docker:v3 \
     --registry-login-server $ACR_NAME.azurecr.io \
     --registry-username $(az keyvault secret show --vault-name $AKV_NAME --name $ACR_NAME-pull-usr --query value -o tsv) \
     --registry-password $(az keyvault secret show --vault-name $AKV_NAME --name $ACR_NAME-pull-pwd --query value -o tsv) \
-    --dns-name-label pr2-acr-tasks-$ACR_NAME \
+    --dns-name-label vwb-acr-tasks-$ACR_NAME \
     --query "{FQDN:ipAddress.fqdn}" \
     --output table
 
-az container attach --resource-group $RES_GROUP --name pr2-acr-tasks
+az container attach --resource-group $RES_GROUP --name vwb-acr-tasks
 
-az container delete --resource-group $RES_GROUP --name acr-tasks
+az container delete --resource-group $RES_GROUP --name vwb-acr-tasks
 
 az group delete --resource-group $RES_GROUP
 az ad sp delete --id http://$ACR_NAME-pull
