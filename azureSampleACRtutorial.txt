@@ -1,0 +1,5 @@
+ACR_NAME=bfvwbcr102121
+RES_GROUP=demo-whiteboard # Resource Group name
+
+az group create --resource-group $RES_GROUP --location eastus
+az acr create --resource-group $RES_GROUP --name $ACR_NAME --sku Standard --location eastus

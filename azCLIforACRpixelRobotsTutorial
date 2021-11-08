@@ -1,0 +1,26 @@
+DEV_ACR=bfvwbcr102121
+GIT_USER=forest-dewberry
+GIT_PAT=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
+
+az acr task create \
+    --registry $DEV_ACR \
+    --name buildpixelweb \
+    --image pixelweb:{{.Run.ID}} \
+    --context https://github.com/$GIT_USER/ContainerPlay.git \
+    --branch version-from-may19 \
+    --file ACRTasks/dockerfile \
+    --git-access-token $GIT_PAT \
+    --platform windows
+
+
+az acr task create --image hello-world:{{.Run.ID}} --name hello-world --registry $DEV_ACR --file dockerfile --auth-mode None --context https://github.com/$GIT_USER/ContainerPlay.git --pull-request-trigger-enabled true --git-access-token $GIT_PAT
+
+# az acr task create --image hello-world:{{.Run.ID}} --name hello-world --registry MyRegistry --file Dockerfile --auth-mod
+# e None --context https://github.com/Azure-Samples/acr-build-helloworld-node.git --pull-request-trigger-enabled true --gi
+# t-access-token 000000000000000000000000000000000
+
+az acr task run --registry $DEV_ACR --name buildpixelweb
+
+az acr task logs --registry $DEV_ACR
+
+az acr task list-runs --registry $DEV_ACR -o table
